@@ -1,0 +1,90 @@
+//Anything in this file will be imported into every vue component
+//PUT GLOBAL STYLES IN global.scss INSTEAD.
+$color-neon-blue: rgba(103,205,220,1);
+$color-neon-pink: rgba(204,50,112,1);
+$color-signboard-background: #252525;
+$color-transparent-black: rgba(55,55,55,0.702);
+
+$breakpoints: (
+  "mobile": 0,
+  "tablet": 700px,
+  "laptop": 992px,
+  "desktop": 1312px
+);
+//USAGE: @media (min-width: map-get($breakpoints, "mobile")) {}
+
+$text-sizes: (
+  "h1": 3.052rem,
+  "h2": 2.441rem,
+  "h3": 1.953rem,
+  "h4": 1.563rem,
+  "h5": 1.25rem
+);
+//USAGE: map-get($text-sizes, "h1");
+
+//Grid style snippets: @include one of thses
+@function columns($cols, $margin: 0px) {
+  @return calc(100% / 12 * #{$cols} - #{$margin});
+}
+//USAGE: width: columns(6, 0px);
+
+
+//Glow Effects
+//USAGE: @include effect-name;
+
+@mixin effect-signboard-glow-neon-pink {
+	box-shadow: inset 0.00px 0.00px 22.00px rgba(203,51,112,0.300) , 0.00px 0.00px 71.00px rgba(203,51,112,0.700);
+}
+//to use this one as a box shadow, use @include effect-text-shadow-white(box-shadow);
+@mixin effect-text-glow-white($property: text-shadow) {
+  #{$property}: 0.00px 0.00px 14.00px rgba(223,253,255,1);
+}
+@mixin effect-button-glow-blue {
+	box-shadow: 0.00px 0.00px 20.00px 3.00px rgba(103,205,220,0.550);
+}
+@mixin effect-button-glow-pink {
+  box-shadow: 0px 0px 20px 3px rgba(204, 50, 112, 0.55);
+}
+@mixin effect-button-glow-white {
+	box-shadow: 0.00px 0.00px 20.00px 3.00px rgba(255,255,255,0.450);
+}
+
+// Contains the properties for a signboard. include in an ::after or ::before element.
+// Make sure to set the position of the parent element to relative add enough margin to show the scaffolding
+// USAGE: .element::after { @include scaffold(57px, top, start); } .element { position: relative; margin-top: 57px; }
+@mixin scaffold($length, $orientation: left, $alignment: center) {
+  content: "";
+  display: block;
+  position: absolute;
+
+  // Set the alignment, can be start, center, end or a custom value. DEFAULT: center
+  @if $alignment == start {
+    $alignment: 14%;
+  } @else if $alignment == center {
+    $alignment: calc(100% / 2 - (37px / 2));
+  } @else if $alignment == end {
+    $alignment: calc(86% - 37px);
+  }
+
+  // Position the scaffold, can be top, left, bottom, or right.
+  @if $orientation == top {
+    top: -#{$length + 2px};
+    left: $alignment;
+  } @else if $orientation == bottom {
+    bottom: -#{$length + 2px};
+    left: $alignment;
+  } @else if $orientation == right {
+    right: -2px;
+    transform-origin: top right;
+    transform: rotate(-90deg);
+    top: $alignment;
+  } @else if $orientation == left {
+    left: -2px;
+    top: $alignment;
+    transform: rotate(90deg);
+    transform-origin: top left;
+  }
+  width: 37px;
+  height: #{$length};
+  background: url("../assets/images/scaffolding.svg");
+}

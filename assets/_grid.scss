@@ -1,0 +1,61 @@
+$grid-margin: 20px !default;
+
+.grid {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	&--justify-center { justify-content: center; }
+  &--justify-start { justify-content: flex-start; }
+  &--justify-end { justify-content: flex-end; }
+  &--justify-sb { justify-content: space-between; }
+  &--justify-sa { justify-content: space-around; }
+
+  &--align-start { align-items: flex-start; };
+  &--align-center { align-items: center; };
+  &--align-end { align-items: flex-end; };
+}
+.column {
+  //TODO add gutters between elements
+  // margin: 1rem 1rem 1rem 0;
+  &--justify-center.column { margin-left: auto; margin-right: auto; }
+  &--justify-start.column { margin-right: auto; }
+  &--justify-end.column { margin-left: auto; }
+
+  &.margin-tlbr { margin: $grid-margin; };
+  &.margin-t { margin-top: $grid-margin; };
+  &.margin-l { margin-left: $grid-margin; };
+  &.margin-b { margin-bottom: $grid-margin; };
+  &.margin-r { margin-right: $grid-margin; };
+
+  &--align-start { align-items: flex-start; };
+  &--align-center { align-items: center; };
+  &--align-end { align-items: flex-end; };
+
+  width: 100%;
+
+  //Width classes for mobile should't be in a breakpoint because they are initial
+  @for $i from 2 through 11 {
+    &--mobile-#{$i} {
+      width: calc(#{percentage($i/12)});
+      //Take the margin away from the width on elements with margin
+      &.margin-tlbr, &.margin-l, &.margin-r {
+        width: calc(#{percentage($i/12)} - #{$grid-margin});
+      }
+    }
+  }
+
+  //Mobile is already taken care of above, loop through every remaining breakpoint and create media queries for each class
+  @each $bp-name, $bp-size in map-remove($breakpoints, "mobile") {
+    @media (min-width: map-get($breakpoints, $bp-name)) {
+      @for $i from 1 through 12 {
+        &--#{$bp-name}-#{$i} {
+          width: calc(#{percentage($i/12)});
+          //Take the margin away from the width on elements with margin
+          &.margin-tlbr, &.margin-l, &.margin-r {
+            width: calc(#{percentage($i/12)} - #{$grid-margin});
+          }
+        }
+      }
+    }
+  }
+}

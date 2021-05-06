@@ -1,0 +1,47 @@
+$cols: 5 !default; //Number of columns in the width utility
+$margin-settings: (
+  "x": ("left", "right"),
+  "y": ("top", "bottom"),
+);
+
+//Mobile
+/* width utils */
+@for $i from 1 through $cols {
+  .w-#{$i}\/#{$cols} {
+    width: calc(100% / #{$cols} * #{$i});
+  }
+}
+
+
+/* heading utils */
+@each $k, $v in $text-sizes {
+  .text-#{$k} { font-size: $v }
+}
+
+@each $key, $bp in map-remove($breakpoints, "mobile") {
+  /* #{$key} */
+  @for $i from 1 through $cols {
+    @media (min-width: $bp) {
+      .#{$key}\:w-#{$i}\/#{$cols} {
+        width: calc(100% / #{$cols} * #{$i});
+      }
+    }
+  }
+
+  //another abomination from yours truly
+  @media (min-width: $bp) {
+    @each $k, $v in $text-sizes {
+      .#{$key}\:text-#{$k} { font-size: $v }
+    }
+
+    // @each $k, $v in $margin-settings {
+    //   .#{$key}\:m#{$k}-auto {
+    //     @each $side in $v {
+    //       margin-#{$side}: auto;
+    //     }
+    //   }
+    // }
+
+  }
+
+}
